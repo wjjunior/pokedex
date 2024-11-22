@@ -3,12 +3,15 @@ import { NextConfig } from "next";
 const nextConfig: NextConfig = {
   webpack(config) {
     config.module.rules.push(
+      // Rule for global LESS files
       {
         test: /\.less$/,
         exclude: /\.module\.less$/,
         use: [
-          "style-loader",
           "css-loader",
+          {
+            loader: "postcss-loader", // Process Tailwind CSS directives
+          },
           {
             loader: "less-loader",
             options: {
@@ -19,15 +22,19 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Rule for modular LESS files
       {
         test: /\.module\.less$/,
         use: [
-          "style-loader",
+          "css-loader",
           {
             loader: "css-loader",
             options: {
-              modules: true,
+              modules: true, // Enable CSS Modules
             },
+          },
+          {
+            loader: "postcss-loader", // Process Tailwind CSS directives
           },
           {
             loader: "less-loader",
