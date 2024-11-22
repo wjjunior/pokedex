@@ -1,6 +1,6 @@
 "use client";
 
-import LoginForm from "@/presentation/pages/login/LoginForm";
+import { LoginForm } from "@/presentation/pages";
 import React from "react";
 
 export default function Login() {
