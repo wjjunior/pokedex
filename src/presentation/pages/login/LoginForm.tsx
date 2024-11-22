@@ -16,7 +16,9 @@ const LoginForm: React.FC = () => {
         <form>
           <Input type="text" placeholder="Username" />
           <Input type="password" placeholder="Password" />
-          <Button type="submit">Login</Button>
+          <Button type="submit" disabled>
+            Login
+          </Button>
         </form>
         <p className="text-xs mt-4 text-gray-400">
           ©2024 Pokémon. <br />
