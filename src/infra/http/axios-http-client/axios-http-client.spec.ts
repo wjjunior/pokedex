@@ -4,6 +4,10 @@ import chance from "chance";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+
+const makeSut = (): AxiosHttpClient => {
+  return new AxiosHttpClient();
+};
 describe("AxiosHttpClient", () => {
   test("Should call axios.post with correct URL and body", async () => {
     const url = chance().url();
@@ -12,7 +16,7 @@ describe("AxiosHttpClient", () => {
 
     mockedAxios.post.mockResolvedValueOnce(response);
 
-    const sut = new AxiosHttpClient();
+    const sut = makeSut();
     const result = await sut.post<typeof body, typeof response.data>({
       url,
       body,
