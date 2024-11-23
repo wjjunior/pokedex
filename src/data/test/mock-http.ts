@@ -13,9 +13,13 @@ export const mockPostRequest = <T = unknown>(body?: T): HttpPostParams<T> => ({
   body,
 });
 
-export const mockGetRequest = <T = unknown>(params?: T): HttpGetParams<T> => ({
+export const mockGetRequest = <T = unknown>(
+  params?: T,
+  pathParams?: string[],
+): HttpGetParams<T> => ({
   url: chance().url(),
   queryParams: params,
+  pathParams,
 });
 
 export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
@@ -33,12 +37,15 @@ export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
 
 export class HttpGetClientSpy<T, R> implements HttpGetClient<T, R> {
   url?: string;
+  pathParams?: string[];
   response: HttpResponse<R> = {
     statusCode: HttpStatusCode.ok,
   };
 
   async get(params: HttpGetParams<T>): Promise<HttpResponse<R>> {
-    this.url = params.url;
+    const fullUrl = `${params.url}${params.pathParams && params.pathParams.length > 0 ? `/${params.pathParams.join("/")}` : ""}`;
+    this.url = fullUrl;
+    this.pathParams = params.pathParams;
     return this.response;
   }
 }

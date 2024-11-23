@@ -27,7 +27,9 @@ export class AxiosHttpClient<T, R>
   async get(params: HttpGetParams<T>): Promise<HttpResponse<R>> {
     let axiosResponse: AxiosResponse<R>;
     try {
-      axiosResponse = await axios.get(params.url, {
+      const fullUrl = `${params.url}${params.pathParams && params.pathParams.length > 0 ? `/${params.pathParams.join("/")}` : ""}`;
+
+      axiosResponse = await axios.get(fullUrl, {
         params: params.queryParams,
       });
     } catch (error) {
