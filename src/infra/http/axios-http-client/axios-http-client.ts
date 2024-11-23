@@ -8,7 +8,7 @@ import {
 import axios, { AxiosResponse } from "axios";
 
 export class AxiosHttpClient<T, R>
-  implements HttpPostClient<T, R>, HttpGetClient<T>
+  implements HttpPostClient<T, R>, HttpGetClient<T, R>
 {
   async post(params: HttpPostParams<T>): Promise<HttpResponse<R>> {
     let httpResponse: AxiosResponse<R>;
@@ -24,10 +24,12 @@ export class AxiosHttpClient<T, R>
     };
   }
 
-  async get(params: HttpGetParams): Promise<HttpResponse<T>> {
-    let axiosResponse: AxiosResponse;
+  async get(params: HttpGetParams<T>): Promise<HttpResponse<R>> {
+    let axiosResponse: AxiosResponse<R>;
     try {
-      axiosResponse = await axios.get(params.url);
+      axiosResponse = await axios.get(params.url, {
+        params: params.queryParams,
+      });
     } catch (error) {
       const axiosError = error as { response: AxiosResponse<R> };
       axiosResponse = axiosError.response;

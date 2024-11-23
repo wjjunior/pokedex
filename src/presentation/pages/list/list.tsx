@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Header,
@@ -9,6 +9,7 @@ import {
 } from "./styles";
 import { PokemonItem, SearchBar } from "@/presentation/components";
 import { LoadPokemonList } from "@/domain/usecases";
+import { PokemonListModel } from "@/domain/models";
 
 type ListProps = {
   loadPokemonList: LoadPokemonList;
@@ -47,11 +48,15 @@ const mockPokemonList = [
 ];
 
 const List: React.FC<ListProps> = ({ loadPokemonList }) => {
+  const [state, setState] = useState({
+    pokemonList: {} as PokemonListModel,
+  });
+
   useEffect(() => {
-    (async function () {
-      loadPokemonList.load();
-    })();
+    loadPokemonList.load().then((pokemonList) => setState({ pokemonList }));
   }, []);
+
+  console.log(state);
 
   return (
     <Container>

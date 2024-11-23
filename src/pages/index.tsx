@@ -1,6 +1,7 @@
-import { List } from "@/presentation/pages";
 import React from "react";
+import { makeList } from "@/main/factories/pages/list/list-factory";
 
 export default function Home() {
-  return <List />;
+  const ListComponent = makeList();
+  return <>{ListComponent}</>;
 }

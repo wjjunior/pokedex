@@ -5,13 +5,17 @@ import { HttpStatusCode } from "@/data/protocols/http";
 import { UnexpectedError } from "@/domain/errors";
 import { PokemonListModel } from "@/domain/models";
 import { mockPokemonListModel } from "@/domain/test/mock-pokemon-list";
+import { LoadPokemonListParams } from "@/domain/usecases";
 
 type SutTypes = {
   sut: RemoteLoadPokemonList;
-  httpGetClientSpy: HttpGetClientSpy<PokemonListModel>;
+  httpGetClientSpy: HttpGetClientSpy<LoadPokemonListParams, PokemonListModel>;
 };
 const makeSut = (url = chance().url()): SutTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy<PokemonListModel>();
+  const httpGetClientSpy = new HttpGetClientSpy<
+    LoadPokemonListParams,
+    PokemonListModel
+  >();
   const sut = new RemoteLoadPokemonList(url, httpGetClientSpy);
   return {
     sut,

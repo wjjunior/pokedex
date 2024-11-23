@@ -13,8 +13,9 @@ export const mockPostRequest = <T = unknown>(body?: T): HttpPostParams<T> => ({
   body,
 });
 
-export const mockGetRequest = (): HttpGetParams => ({
+export const mockGetRequest = <T = unknown>(params?: T): HttpGetParams<T> => ({
   url: chance().url(),
+  queryParams: params,
 });
 
 export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
@@ -30,13 +31,13 @@ export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
   }
 }
 
-export class HttpGetClientSpy<R> implements HttpGetClient<R> {
+export class HttpGetClientSpy<T, R> implements HttpGetClient<T, R> {
   url?: string;
   response: HttpResponse<R> = {
     statusCode: HttpStatusCode.ok,
   };
 
-  async get(params: HttpGetParams): Promise<HttpResponse<R>> {
+  async get(params: HttpGetParams<T>): Promise<HttpResponse<R>> {
     this.url = params.url;
     return this.response;
   }
