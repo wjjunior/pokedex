@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Header,
@@ -8,6 +8,11 @@ import {
   NoMatchingAlert,
 } from "./styles";
 import { PokemonItem, SearchBar } from "@/presentation/components";
+import { LoadPokemonList } from "@/domain/usecases";
+
+type ListProps = {
+  loadPokemonList: LoadPokemonList;
+};
 
 const mockPokemonList = [
   {
@@ -41,7 +46,13 @@ const mockPokemonList = [
   },
 ];
 
-const List = () => {
+const List: React.FC<ListProps> = ({ loadPokemonList }) => {
+  useEffect(() => {
+    (async function () {
+      loadPokemonList.load();
+    })();
+  }, []);
+
   return (
     <Container>
       <Header>
