@@ -6,8 +6,21 @@ import { theme } from "@/presentation/theme/theme";
 import { ThemeProvider } from "styled-components";
 import chance from "chance";
 import { AuthenticationSpy } from "@/presentation/test";
+import "jest-localstorage-mock";
+import { useRouter } from "next/router";
+
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}));
 
 describe("Login Component", () => {
+  const pushMock = jest.fn();
+
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue({
+      push: pushMock,
+    });
+  });
   test("Should start with initial state", () => {
     const { getByRole } = getRenderer();
     const submitButton = getByRole("button", {
@@ -37,6 +50,8 @@ describe("Login Component", () => {
       email,
       password,
     });
+
+    expect(pushMock).toHaveBeenCalledWith("/");
   });
 });
 
