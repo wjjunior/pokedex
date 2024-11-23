@@ -1,5 +1,5 @@
 import { PokemonListModel } from "@/domain/models";
 
-export interface LoadSurveyList {
+export interface LoadPokemonList {
   load: () => Promise<PokemonListModel[]>;
 }
