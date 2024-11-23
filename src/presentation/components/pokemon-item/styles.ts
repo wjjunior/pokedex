@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 interface SectionProps {
-  sprite: string;
+  sprite: string | null;
 }
 
 export const Container = styled.li<ContainerProps>`

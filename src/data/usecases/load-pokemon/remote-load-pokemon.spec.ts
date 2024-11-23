@@ -1,29 +1,29 @@
 import { HttpGetClientSpy } from "@/data/test";
 import chance from "chance";
-import { RemoteLoadPokemonList } from "./remote-load-pokemon-list";
 import { HttpStatusCode } from "@/data/protocols/http";
 import { UnexpectedError } from "@/domain/errors";
-import { PokemonListModel } from "@/domain/models";
-import { mockPokemonListModel } from "@/domain/test";
-import { LoadPokemonListParams } from "@/domain/usecases";
+import { PokemonModel } from "@/domain/models";
+import { LoadPokemonParams } from "@/domain/usecases";
+import { RemoteLoadPokemon } from "./remote-load-pokemon";
+import { mockPokemon } from "@/domain/test";
 
 type SutTypes = {
-  sut: RemoteLoadPokemonList;
-  httpGetClientSpy: HttpGetClientSpy<LoadPokemonListParams, PokemonListModel>;
+  sut: RemoteLoadPokemon;
+  httpGetClientSpy: HttpGetClientSpy<LoadPokemonParams, PokemonModel>;
 };
 const makeSut = (url = chance().url()): SutTypes => {
   const httpGetClientSpy = new HttpGetClientSpy<
-    LoadPokemonListParams,
-    PokemonListModel
+    LoadPokemonParams,
+    PokemonModel
   >();
-  const sut = new RemoteLoadPokemonList(url, httpGetClientSpy);
+  const sut = new RemoteLoadPokemon(url, httpGetClientSpy);
   return {
     sut,
     httpGetClientSpy,
   };
 };
 
-describe("RemoteLoadPokemonList", () => {
+describe("RemoteLoadPokemon", () => {
   test("Should call HttpGetClient with correct URL", async () => {
     const url = chance().url();
     const { sut, httpGetClientSpy } = makeSut(url);
@@ -60,7 +60,7 @@ describe("RemoteLoadPokemonList", () => {
 
   test("Should return a Pokemon list if HttpGetClient returns 200", async () => {
     const { sut, httpGetClientSpy } = makeSut();
-    const httpResult = mockPokemonListModel();
+    const httpResult = mockPokemon();
     httpGetClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: httpResult,

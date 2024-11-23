@@ -1,33 +1,17 @@
 import React from "react";
 import { Container, Index, Header, Section } from "./styles";
 import { PokemonType } from "..";
+import { PokemonModel } from "@/domain/models";
 
 interface PokemonItemProps {
-  pokemon: Pokemon;
-  sprite: string;
+  pokemon: PokemonModel;
 }
 
-interface Pokemon {
-  id: number;
-  name: string;
-  sprites: {
-    other: {
-      "official-artwork": {
-        front_default: string;
-      };
-    };
-  };
-  types: Type[];
-}
+const PokemonItem = ({ pokemon }: PokemonItemProps) => {
+  const sprite = pokemon.sprites?.other
+    ? pokemon.sprites.other["official-artwork"].front_default
+    : "";
 
-interface Type {
-  slot: number;
-  type: {
-    name: string;
-  };
-}
-
-const PokemonItem = ({ pokemon, sprite }: PokemonItemProps) => {
   return (
     <Container type={`${pokemon.types[0].type.name}`}>
       <Header nameLength={pokemon.name.length}>

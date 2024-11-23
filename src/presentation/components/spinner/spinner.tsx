@@ -28,7 +28,7 @@ const SpinnerWrapper = styled.div<{
   }
 `;
 
-export const Spinner: React.FC<SpinnerProps> = ({ size = "24px", color }) => {
+const Spinner: React.FC<SpinnerProps> = ({ size = "24px", color }) => {
   const theme = useTheme();
   return (
     <SpinnerWrapper
@@ -40,3 +40,5 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = "24px", color }) => {
     />
   );
 };
+
+export default Spinner;

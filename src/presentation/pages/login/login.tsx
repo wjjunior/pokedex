@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, Button, Container, Input } from "./styles";
 import { Authentication } from "@/domain/usecases/authentication";
 import { useRouter } from "next/router";
-import { Spinner } from "@/presentation/components/spinner/spinner";
+import { Spinner } from "@/presentation/components";
 
 type LoginProps = {
   authentication: Authentication;

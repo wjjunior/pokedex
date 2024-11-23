@@ -7,56 +7,51 @@ import {
   MorePokemonArea,
   NoMatchingAlert,
 } from "./styles";
-import { PokemonItem, SearchBar } from "@/presentation/components";
-import { LoadPokemonList } from "@/domain/usecases";
-import { PokemonListModel } from "@/domain/models";
+import { PokemonItem, SearchBar, Spinner } from "@/presentation/components";
+import { LoadPokemon, LoadPokemonList } from "@/domain/usecases";
+import { PokemonModel } from "@/domain/models";
 
 type ListProps = {
   loadPokemonList: LoadPokemonList;
+  loadPokemon: LoadPokemon;
 };
 
-const mockPokemonList = [
-  {
-    id: 1,
-    name: "bulbasaur",
-    sprites: {
-      other: {
-        "official-artwork": {
-          front_default:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-        },
-      },
-    },
-    types: [
-      { slot: 1, type: { name: "grass" } },
-      { slot: 2, type: { name: "poison" } },
-    ],
-  },
-  {
-    id: 4,
-    name: "charmander",
-    sprites: {
-      other: {
-        "official-artwork": {
-          front_default:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png",
-        },
-      },
-    },
-    types: [{ slot: 1, type: { name: "fire" } }],
-  },
-];
-
-const List: React.FC<ListProps> = ({ loadPokemonList }) => {
+const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
   const [state, setState] = useState({
-    pokemonList: {} as PokemonListModel,
+    pokemonList: [] as PokemonModel[],
+    loading: true,
   });
 
   useEffect(() => {
-    loadPokemonList.load().then((pokemonList) => setState({ pokemonList }));
-  }, []);
+    const fetchPokemon = async () => {
+      try {
+        const response = await loadPokemonList.load();
+        const pokemonResults = response.results;
 
-  console.log(state);
+        const results = await Promise.allSettled(
+          pokemonResults.map(async (pokemon: { name: string; url: string }) => {
+            const pokemonDetail = await loadPokemon.load({
+              name: pokemon.name,
+            });
+            return pokemonDetail;
+          }),
+        );
+
+        const detailedPokemon = results
+          .filter((result) => result.status === "fulfilled")
+          .map(
+            (result) => (result as PromiseFulfilledResult<PokemonModel>).value,
+          );
+
+        setState({ pokemonList: detailedPokemon, loading: false });
+      } catch (error) {
+        console.error("Error fetching Pokémon data:", error);
+        setState({ pokemonList: [], loading: false });
+      }
+    };
+
+    fetchPokemon();
+  }, [loadPokemonList, loadPokemon]);
 
   return (
     <Container>
@@ -68,30 +63,32 @@ const List: React.FC<ListProps> = ({ loadPokemonList }) => {
       </Header>
       <main>
         <section>
-          <PokemonList>
-            {mockPokemonList.map((pokemon) => (
-              <PokemonItem
-                key={pokemon.id}
-                pokemon={pokemon}
-                sprite={pokemon.sprites.other["official-artwork"].front_default}
-              />
-            ))}
-          </PokemonList>
-        </section>
-
-        <section>
-          <MorePokemonArea>
-            <button type="button" disabled>
-              Load more Pokémon
-            </button>
-          </MorePokemonArea>
-
-          {!mockPokemonList.length && (
-            <NoMatchingAlert>
-              <h3>No Pokémon matches your search!</h3>
-            </NoMatchingAlert>
+          {state.loading ? (
+            <Spinner />
+          ) : (
+            <PokemonList>
+              {state.pokemonList.map((pokemon) => (
+                <PokemonItem key={pokemon.id} pokemon={pokemon} />
+              ))}
+            </PokemonList>
           )}
         </section>
+
+        {!state.loading && (
+          <section>
+            <MorePokemonArea>
+              <button type="button" disabled>
+                Load more Pokémon
+              </button>
+            </MorePokemonArea>
+
+            {!state.pokemonList.length && (
+              <NoMatchingAlert>
+                <h3>No Pokémon matches your search!</h3>
+              </NoMatchingAlert>
+            )}
+          </section>
+        )}
       </main>
     </Container>
   );
