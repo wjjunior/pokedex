@@ -46,6 +46,8 @@ export const Button = styled.button`
   border: none;
   border-radius: 0.375rem;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
   &:hover {
     background-color: ${(props) => props.theme.colors.primaryHover};
   }

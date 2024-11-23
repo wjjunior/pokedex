@@ -9,5 +9,7 @@ export const theme = {
     error: "#ef4444",
     disabledBackground: "#cccccc",
     disabledColor: "#666666",
+    defaultGray: "#e5e7eb",
+    red: "#e61923",
   },
 };

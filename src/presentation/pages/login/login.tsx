@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, Button, Container, Input } from "./styles";
 import { Authentication } from "@/domain/usecases/authentication";
 import { useRouter } from "next/router";
+import { Spinner } from "@/presentation/components/spinner/spinner";
 
 type LoginProps = {
   authentication: Authentication;
@@ -20,12 +21,18 @@ const Login: React.FC<LoginProps> = ({ authentication }) => {
   ): Promise<void> => {
     event.preventDefault();
     setState({ ...state, isLoading: true });
-    const account = await authentication.auth({
-      email: state.email,
-      password: state.password,
-    });
-    localStorage.setItem("accessToken", account.accessToken);
-    router.push("/");
+    try {
+      const account = await authentication.auth({
+        email: state.email,
+        password: state.password,
+      });
+      document.cookie = `accessToken=${account.accessToken}`;
+      router.push("/");
+    } catch (error) {
+      console.error("Authentication failed:", error);
+    } finally {
+      setState({ ...state, isLoading: false });
+    }
   };
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>): void => {
@@ -63,7 +70,7 @@ const Login: React.FC<LoginProps> = ({ authentication }) => {
             type="submit"
             disabled={!state.email || !state.password || state.isLoading}
           >
-            Login
+            {state.isLoading ? <Spinner /> : "Login"}
           </Button>
         </form>
         <p className="text-xs mt-4 text-gray-400">
