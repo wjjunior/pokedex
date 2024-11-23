@@ -1,23 +1,24 @@
 import { HttpGetClientSpy } from "@/data/test";
 import chance from "chance";
-import { LoadPokemonList } from "./load-pokemon-list";
+import { RemoteLoadPokemonList } from "./remote-load-pokemon-list";
 import { HttpStatusCode } from "@/data/protocols/http";
 import { UnexpectedError } from "@/domain/errors";
+import { PokemonListModel } from "@/domain/models";
 
 type SutTypes = {
-  sut: LoadPokemonList;
-  httpGetClientSpy: HttpGetClientSpy<LoadPokemonList>;
+  sut: RemoteLoadPokemonList;
+  httpGetClientSpy: HttpGetClientSpy<PokemonListModel>;
 };
 const makeSut = (url = chance().url()): SutTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy<LoadPokemonList>();
-  const sut = new LoadPokemonList(url, httpGetClientSpy);
+  const httpGetClientSpy = new HttpGetClientSpy<PokemonListModel>();
+  const sut = new RemoteLoadPokemonList(url, httpGetClientSpy);
   return {
     sut,
     httpGetClientSpy,
   };
 };
 
-describe("LoadPokemonList", () => {
+describe("RemoteLoadPokemonList", () => {
   test("Should call HttpGetClient with correct URL", async () => {
     const url = chance().url();
     const { sut, httpGetClientSpy } = makeSut(url);
