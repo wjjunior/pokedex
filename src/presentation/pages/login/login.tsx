@@ -18,7 +18,11 @@ const Login: React.FC<LoginProps> = ({ authentication }) => {
   ): Promise<void> => {
     event.preventDefault();
     setState({ ...state, isLoading: true });
-    await authentication.auth({ email: state.email, password: state.password });
+    const account = await authentication.auth({
+      email: state.email,
+      password: state.password,
+    });
+    localStorage.setItem("accessToken", account.accessToken);
   };
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>): void => {
