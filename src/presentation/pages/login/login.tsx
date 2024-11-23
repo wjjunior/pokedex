@@ -52,7 +52,10 @@ const Login: React.FC<LoginProps> = ({ authentication }) => {
             name="password"
             onChange={handleChange}
           />
-          <Button type="submit" disabled={!state.email || !state.password}>
+          <Button
+            type="submit"
+            disabled={!state.email || !state.password || state.isLoading}
+          >
             Login
           </Button>
         </form>
