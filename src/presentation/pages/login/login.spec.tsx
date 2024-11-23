@@ -53,6 +53,43 @@ describe("Login Component", () => {
 
     expect(pushMock).toHaveBeenCalledWith("/");
   });
+
+  test("Should show spinner during form submission", async () => {
+    const {
+      getByPlaceholderText,
+      getByRole,
+      getByLabelText,
+      authenticationSpy,
+    } = getRenderer();
+
+    const emailInput = getByPlaceholderText("Email");
+    const email = chance().email();
+    await userEvent.type(emailInput, email);
+
+    const passwordInput = getByPlaceholderText("Password");
+    const password = chance().string({ length: 12 });
+    await userEvent.type(passwordInput, password);
+
+    const submitButton = getByRole("button", { name: "Login" });
+
+    authenticationSpy.auth = jest.fn(
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ accessToken: "fake-token" }), 2000),
+        ),
+    );
+
+    await userEvent.click(submitButton);
+
+    const spinner = getByLabelText("loading");
+
+    expect(submitButton).toHaveAttribute("disabled");
+    expect(spinner).toBeInTheDocument();
+
+    await authenticationSpy.auth;
+
+    expect(submitButton.querySelector(".spinner")).not.toBeInTheDocument();
+  });
 });
 
 function getRenderer() {

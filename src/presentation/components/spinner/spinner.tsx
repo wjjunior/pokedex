@@ -35,6 +35,7 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = "24px", color }) => {
       size={size}
       color={color || theme.colors.red}
       bgColor={theme.colors.defaultGray}
+      aria-label="loading"
       role="status"
     />
   );
