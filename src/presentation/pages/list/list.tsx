@@ -20,38 +20,52 @@ const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
   const [state, setState] = useState({
     pokemonList: [] as PokemonModel[],
     loading: true,
+    offset: 0,
+    limit: 20,
+    hasMore: true,
   });
 
-  useEffect(() => {
-    const fetchPokemon = async () => {
-      try {
-        const response = await loadPokemonList.load();
-        const pokemonResults = response.results;
+  const fetchPokemon = async () => {
+    try {
+      setState((prevState) => ({ ...prevState, loading: true }));
 
-        const results = await Promise.allSettled(
-          pokemonResults.map(async (pokemon: { name: string; url: string }) => {
-            const pokemonDetail = await loadPokemon.load({
-              name: pokemon.name,
-            });
-            return pokemonDetail;
-          }),
+      const response = await loadPokemonList.load({
+        offset: state.offset,
+        limit: state.limit,
+      });
+      const pokemonResults = response.results;
+
+      const results = await Promise.allSettled(
+        pokemonResults.map(async (pokemon: { name: string; url: string }) => {
+          const pokemonDetail = await loadPokemon.load({
+            name: pokemon.name,
+          });
+          return pokemonDetail;
+        }),
+      );
+
+      const detailedPokemon = results
+        .filter((result) => result.status === "fulfilled")
+        .map(
+          (result) => (result as PromiseFulfilledResult<PokemonModel>).value,
         );
 
-        const detailedPokemon = results
-          .filter((result) => result.status === "fulfilled")
-          .map(
-            (result) => (result as PromiseFulfilledResult<PokemonModel>).value,
-          );
+      setState((prevState) => ({
+        ...prevState,
+        pokemonList: [...prevState.pokemonList, ...detailedPokemon],
+        loading: false,
+        hasMore: !!response.next,
+        offset: prevState.offset + state.limit,
+      }));
+    } catch (error) {
+      console.error("Error fetching Pokémon data:", error);
+      setState((prevState) => ({ ...prevState, loading: false }));
+    }
+  };
 
-        setState({ pokemonList: detailedPokemon, loading: false });
-      } catch (error) {
-        console.error("Error fetching Pokémon data:", error);
-        setState({ pokemonList: [], loading: false });
-      }
-    };
-
+  useEffect(() => {
     fetchPokemon();
-  }, [loadPokemonList, loadPokemon]);
+  }, []);
 
   return (
     <Container>
@@ -63,7 +77,7 @@ const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
       </Header>
       <main>
         <section>
-          {state.loading ? (
+          {state.loading && state.pokemonList.length === 0 ? (
             <Spinner />
           ) : (
             <PokemonList>
@@ -80,9 +94,13 @@ const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
         {!state.loading && (
           <section>
             <MorePokemonArea>
-              <button type="button" disabled>
-                Load more Pokémon
-              </button>
+              {state.hasMore ? (
+                <button type="button" onClick={fetchPokemon}>
+                  Load more Pokémon
+                </button>
+              ) : (
+                <p>No more Pokémon to load</p>
+              )}
             </MorePokemonArea>
 
             {!state.pokemonList.length && (
