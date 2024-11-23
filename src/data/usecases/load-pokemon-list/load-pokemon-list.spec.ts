@@ -4,10 +4,10 @@ import { LoadPokemonList } from "./load-pokemon-list";
 
 type SutTypes = {
   sut: LoadPokemonList;
-  httpGetClientSpy: HttpGetClientSpy;
+  httpGetClientSpy: HttpGetClientSpy<LoadPokemonList>;
 };
 const makeSut = (url = chance().url()): SutTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy();
+  const httpGetClientSpy = new HttpGetClientSpy<LoadPokemonList>();
   const sut = new LoadPokemonList(url, httpGetClientSpy);
   return {
     sut,
@@ -15,7 +15,7 @@ const makeSut = (url = chance().url()): SutTypes => {
   };
 };
 
-describe("RemoteLoadSurveyList", () => {
+describe("LoadPokemonList", () => {
   test("Should call HttpGetClient with correct URL", async () => {
     const url = chance().url();
     const { sut, httpGetClientSpy } = makeSut(url);
