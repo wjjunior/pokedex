@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Button, Container, Input } from "./styles";
+import { Authentication } from "@/domain/usecases/authentication";
 
-const LoginForm: React.FC = () => {
+type LoginProps = {
+  authentication: Authentication;
+};
+
+const Login: React.FC<LoginProps> = ({ authentication }) => {
+  const [state, setState] = useState({
+    isLoading: false,
+    email: "",
+    password: "",
+  });
+
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    event.preventDefault();
+    setState({ ...state, isLoading: true });
+    await authentication.auth({ email: state.email, password: state.password });
+  };
+
+  const handleChange = (event: React.FocusEvent<HTMLInputElement>): void => {
+    setState({
+      ...state,
+      [event.target.name]: event.target.value,
+    });
+  };
+
   return (
     <Container>
       <Card>
@@ -13,10 +39,20 @@ const LoginForm: React.FC = () => {
           />
         </div>
 
-        <form>
-          <Input type="text" placeholder="Username" />
-          <Input type="password" placeholder="Password" />
-          <Button type="submit" disabled>
+        <form onSubmit={handleSubmit}>
+          <Input
+            type="email"
+            placeholder="Email"
+            name="email"
+            onChange={handleChange}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            name="password"
+            onChange={handleChange}
+          />
+          <Button type="submit" disabled={!state.email || !state.password}>
             Login
           </Button>
         </form>
@@ -29,4 +65,4 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default LoginForm;
+export default Login;
