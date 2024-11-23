@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Card, Button, Container, Input } from "./styles";
 import { Authentication } from "@/domain/usecases/authentication";
+import { useRouter } from "next/router";
 
 type LoginProps = {
   authentication: Authentication;
 };
 
 const Login: React.FC<LoginProps> = ({ authentication }) => {
+  const router = useRouter();
   const [state, setState] = useState({
     isLoading: false,
     email: "",
@@ -23,6 +25,7 @@ const Login: React.FC<LoginProps> = ({ authentication }) => {
       password: state.password,
     });
     localStorage.setItem("accessToken", account.accessToken);
+    router.push("/");
   };
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>): void => {
