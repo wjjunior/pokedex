@@ -4,6 +4,7 @@ import { RemoteLoadPokemonList } from "./remote-load-pokemon-list";
 import { HttpStatusCode } from "@/data/protocols/http";
 import { UnexpectedError } from "@/domain/errors";
 import { PokemonListModel } from "@/domain/models";
+import { mockPokemonListModel } from "@/domain/test/mock-pokemon-list";
 
 type SutTypes = {
   sut: RemoteLoadPokemonList;
@@ -51,5 +52,16 @@ describe("RemoteLoadPokemonList", () => {
     };
     const promise = sut.load();
     await expect(promise).rejects.toThrow(new UnexpectedError());
+  });
+
+  test("Should return a Pokemon list if HttpGetClient returns 200", async () => {
+    const { sut, httpGetClientSpy } = makeSut();
+    const httpResult = mockPokemonListModel();
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: httpResult,
+    };
+    const surveyList = await sut.load();
+    expect(surveyList).toEqual(httpResult);
   });
 });
