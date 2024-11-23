@@ -3,6 +3,6 @@ import { HttpResponse } from "./http-response";
 export type HttpGetParams = {
   url: string;
 };
-export interface HttpGetClient<R> {
-  get: (params: HttpGetParams) => Promise<HttpResponse<R>>;
+export interface HttpGetClient<T> {
+  get: (params: HttpGetParams) => Promise<HttpResponse<T>>;
 }

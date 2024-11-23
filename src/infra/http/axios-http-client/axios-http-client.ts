@@ -1,4 +1,5 @@
 import {
+  HttpGetClient,
   HttpGetParams,
   HttpPostClient,
   HttpPostParams,
@@ -6,7 +7,9 @@ import {
 } from "@/data/protocols/http";
 import axios, { AxiosResponse } from "axios";
 
-export class AxiosHttpClient<T, R> implements HttpPostClient<T, R> {
+export class AxiosHttpClient<T, R>
+  implements HttpPostClient<T, R>, HttpGetClient<T>
+{
   async post(params: HttpPostParams<T>): Promise<HttpResponse<R>> {
     let httpResponse: AxiosResponse<R>;
     try {
@@ -21,7 +24,11 @@ export class AxiosHttpClient<T, R> implements HttpPostClient<T, R> {
     };
   }
 
-  async get(params: HttpGetParams): Promise<void> {
-    await axios.get(params.url);
+  async get(params: HttpGetParams): Promise<HttpResponse<T>> {
+    const axiosResponse = await axios.get(params.url);
+    return {
+      statusCode: axiosResponse.status,
+      body: axiosResponse.data,
+    };
   }
 }
