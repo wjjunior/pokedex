@@ -5,7 +5,17 @@ import {
   HttpPostParams,
   HttpResponse,
   HttpStatusCode,
-} from "@/data/protocols/http";
+} from "../protocols/http";
+import chance from "chance";
+
+export const mockPostRequest = <T = unknown>(body?: T): HttpPostParams<T> => ({
+  url: chance().url(),
+  body,
+});
+
+export const mockGetRequest = (): HttpGetParams => ({
+  url: chance().url(),
+});
 
 export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
   url?: string;
@@ -25,6 +35,7 @@ export class HttpGetClientSpy<R> implements HttpGetClient<R> {
   response: HttpResponse<R> = {
     statusCode: HttpStatusCode.ok,
   };
+
   async get(params: HttpGetParams): Promise<HttpResponse<R>> {
     this.url = params.url;
     return this.response;
