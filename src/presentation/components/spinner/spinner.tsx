@@ -6,7 +6,9 @@ type SpinnerProps = {
   color?: string;
 };
 
-const SpinnerWrapper = styled.div<{
+const SpinnerWrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "bgColor",
+})<{
   size: string;
   color: string;
   bgColor: string;
