@@ -4,23 +4,8 @@ import userEvent from "@testing-library/user-event";
 import Login from "./login";
 import { theme } from "@/presentation/theme/theme";
 import { ThemeProvider } from "styled-components";
-import { AccountModel } from "@/domain/models";
-import { mockAccountModel } from "@/domain/test";
 import chance from "chance";
-
-import {
-  Authentication,
-  AuthenticationParams,
-} from "@/domain/usecases/authentication";
-
-class AuthenticationSpy implements Authentication {
-  account = mockAccountModel();
-  params?: AuthenticationParams;
-  async auth(params: AuthenticationParams): Promise<AccountModel> {
-    this.params = params;
-    return Promise.resolve(this.account);
-  }
-}
+import { AuthenticationSpy } from "@/presentation/test";
 
 describe("Login Component", () => {
   test("Should start with initial state", () => {
