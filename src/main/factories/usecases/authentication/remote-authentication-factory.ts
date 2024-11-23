@@ -6,7 +6,7 @@ import { AccountModel } from "@/domain/models";
 
 export const makeRemoteAuthentication = (): Authentication => {
   return new RemoteAuthentication(
-    makeApiUrl(),
+    makeApiUrl("/login"),
     makeAxiosHttpClient<AuthenticationParams, AccountModel>(),
   );
 };

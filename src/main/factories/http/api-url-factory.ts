@@ -1,3 +1,3 @@
-export const makeApiUrl = (): string => {
-  return "http://login.cloudflare.com";
+export const makeApiUrl = (path: string): string => {
+  return `https://pokeapi.co/api/v2/${path}`;
 };
