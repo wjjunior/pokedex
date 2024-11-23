@@ -1,6 +1,6 @@
 import { HttpGetClient } from "@/data/protocols/http";
 
-export class RemoteLoadPokemonList {
+export class LoadPokemonList {
   constructor(
     private readonly url: string,
     private readonly httpGetClient: HttpGetClient,

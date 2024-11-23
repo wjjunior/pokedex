@@ -1,4 +1,6 @@
 import {
+  HttpGetClient,
+  HttpGetParams,
   HttpPostClient,
   HttpPostParams,
   HttpResponse,
@@ -15,5 +17,12 @@ export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
     this.url = params.url;
     this.body = params.body;
     return Promise.resolve(this.response);
+  }
+}
+
+export class HttpGetClientSpy implements HttpGetClient {
+  url?: string;
+  async get(params: HttpGetParams): Promise<void> {
+    this.url = params.url;
   }
 }
