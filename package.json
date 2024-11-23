@@ -29,7 +29,7 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/chance": "^1.1.6",
     "@types/jest": "^29.5.14",
-    "@types/node": "^20",
+    "@types/node": "^22.9.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/styled-components": "^5.1.34",
