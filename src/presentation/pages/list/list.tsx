@@ -67,8 +67,11 @@ const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
             <Spinner />
           ) : (
             <PokemonList>
-              {state.pokemonList.map((pokemon) => (
-                <PokemonItem key={pokemon.id} pokemon={pokemon} />
+              {state.pokemonList.map((pokemon, index) => (
+                <PokemonItem
+                  key={`${pokemon.name}-${index}`}
+                  pokemon={pokemon}
+                />
               ))}
             </PokemonList>
           )}

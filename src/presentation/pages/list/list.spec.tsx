@@ -14,7 +14,6 @@ describe("List Component", () => {
   test("Should call LoadPokemon for each result in LoadPokemonList", async () => {
     const loadPokemonListSpy = new LoadPokemonListSpy();
 
-    // Mock LoadPokemonListSpy to return multiple results
     loadPokemonListSpy.load = jest.fn().mockResolvedValueOnce({
       count: 3,
       next: null,
