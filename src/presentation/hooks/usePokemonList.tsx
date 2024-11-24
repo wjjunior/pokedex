@@ -33,13 +33,14 @@ export const usePokemonList = ({
 
   const fetchPokemon = async (query?: string) => {
     try {
-      setState((prevState) => ({
-        ...prevState,
-        pokemonList: [],
-        loading: true,
-      }));
-
       if (query) {
+        setState((prevState) => ({
+          ...prevState,
+          pokemonList: [],
+          loading: true,
+          hasMore: false,
+          offset: 0,
+        }));
         try {
           const pokemon = await loadPokemon.load({ name: query });
           setState({
@@ -61,6 +62,11 @@ export const usePokemonList = ({
         }
         return;
       }
+
+      setState((prevState) => ({
+        ...prevState,
+        loading: true,
+      }));
 
       const response = await loadPokemonList.load({
         offset: state.offset,
@@ -97,6 +103,10 @@ export const usePokemonList = ({
   };
 
   const handleSearch = async (query: string) => {
+    setState((prevState) => ({
+      ...prevState,
+      pokemonList: [],
+    }));
     await fetchPokemon(query);
   };
 
