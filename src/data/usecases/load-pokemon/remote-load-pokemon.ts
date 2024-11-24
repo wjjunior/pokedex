@@ -11,7 +11,7 @@ export class RemoteLoadPokemon implements LoadPokemon {
       PokemonModel
     >,
   ) {}
-  async load(params?: LoadPokemonParams): Promise<PokemonModel> {
+  async load(params?: LoadPokemonParams): Promise<PokemonModel | null> {
     const httpResponse = await this.httpGetClient.get({
       url: this.url,
       ...(params && { pathParams: [params.name] }),
@@ -20,6 +20,8 @@ export class RemoteLoadPokemon implements LoadPokemon {
     switch (httpResponse.statusCode) {
       case HttpStatusCode.ok:
         return httpResponse.body!;
+      case HttpStatusCode.notFound:
+        return null;
       default:
         throw new UnexpectedError();
     }

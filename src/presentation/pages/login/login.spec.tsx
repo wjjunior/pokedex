@@ -37,9 +37,7 @@ describe("Login Component", () => {
     const email = chance().email();
     await userEvent.type(emailInput, email);
     const passwordInput = getByPlaceholderText("Password");
-    const password = chance().string({
-      length: 12,
-    });
+    const password = "test123";
     await userEvent.type(passwordInput, password);
 
     const submitButton = getByRole("button", {
@@ -67,7 +65,7 @@ describe("Login Component", () => {
     await userEvent.type(emailInput, email);
 
     const passwordInput = getByPlaceholderText("Password");
-    const password = chance().string({ length: 12 });
+    const password = "test123";
     await userEvent.type(passwordInput, password);
 
     const submitButton = getByRole("button", { name: "Login" });

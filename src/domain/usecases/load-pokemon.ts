@@ -4,5 +4,5 @@ export type LoadPokemonParams = {
   name: string;
 };
 export interface LoadPokemon {
-  load: (params?: LoadPokemonParams) => Promise<PokemonModel>;
+  load: (params?: LoadPokemonParams) => Promise<PokemonModel | null>;
 }

@@ -26,9 +26,34 @@ const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
     hasMore: true,
   });
 
-  const fetchPokemon = async () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const fetchPokemon = async (query?: string) => {
     try {
       setState((prevState) => ({ ...prevState, loading: true }));
+
+      if (query) {
+        try {
+          const pokemon = await loadPokemon.load({ name: query });
+          setState({
+            pokemonList: pokemon ? [pokemon] : [],
+            loading: false,
+            hasMore: false,
+            offset: 0,
+            limit: state.limit,
+          });
+        } catch (error) {
+          console.error("Error fetching Pokémon by ID or name:", error);
+          setState({
+            pokemonList: [],
+            loading: false,
+            hasMore: false,
+            offset: 0,
+            limit: state.limit,
+          });
+        }
+        return;
+      }
 
       const response = await loadPokemonList.load({
         offset: state.offset,
@@ -68,12 +93,27 @@ const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
     fetchPokemon();
   }, []);
 
+  const handleSearch = async (query: string) => {
+    setSearchQuery(query);
+    fetchPokemon(query);
+  };
+
   return (
     <Container>
       <Header>
         <Title>Pokédex</Title>
-        <form>
-          <SearchBar />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch(searchQuery);
+          }}
+        >
+          <SearchBar
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchQuery(e.target.value)
+            }
+          />
         </form>
       </Header>
       <main>
@@ -98,12 +138,10 @@ const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
           <section>
             <MorePokemonArea>
               {state.hasMore ? (
-                <button type="button" onClick={fetchPokemon}>
+                <button type="button" onClick={() => fetchPokemon()}>
                   Load more Pokémon
                 </button>
-              ) : (
-                <p>No more Pokémon to load</p>
-              )}
+              ) : null}
             </MorePokemonArea>
 
             {!state.pokemonList.length && (

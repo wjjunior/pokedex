@@ -40,13 +40,13 @@ describe("RemoteLoadPokemon", () => {
     await expect(promise).rejects.toThrow(new UnexpectedError());
   });
 
-  test("Should throw UnexpectedError if HttpGetClient returns 404", async () => {
+  test("Should return null if HttpGetClient returns 404", async () => {
     const { sut, httpGetClientSpy } = makeSut();
     httpGetClientSpy.response = {
       statusCode: HttpStatusCode.notFound,
     };
-    const promise = sut.load();
-    await expect(promise).rejects.toThrow(new UnexpectedError());
+    const promise = await sut.load();
+    await expect(promise).toBeNull();
   });
 
   test("Should throw UnexpectedError if HttpGetClient returns 500", async () => {

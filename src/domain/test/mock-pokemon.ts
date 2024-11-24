@@ -3,10 +3,14 @@ import { PokemonModel } from "../models";
 
 const chance = new Chance();
 
-export const mockPokemon = (): PokemonModel => {
+interface MockPokemonProps {
+  name?: string;
+}
+
+export const mockPokemon = (params?: MockPokemonProps): PokemonModel => {
   return {
     id: chance.integer({ min: 1, max: 1000 }),
-    name: chance.word(),
+    name: params?.name ?? chance.word(),
     base_experience: chance.integer({ min: 50, max: 300 }),
     height: chance.integer({ min: 1, max: 20 }),
     weight: chance.integer({ min: 1, max: 1000 }),
