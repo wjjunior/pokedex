@@ -70,6 +70,7 @@ export const Section = styled.section.withConfig({
   display: flex;
   padding-bottom: 20px;
   height: 100%;
+  position: relative;
 
   ul {
     display: flex;
@@ -88,5 +89,37 @@ export const Section = styled.section.withConfig({
     background-position: center center;
     background-repeat: no-repeat;
     transform: translateY(-10px);
+  }
+
+  .heart-icon {
+    position: absolute;
+    bottom: 12px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    transition:
+      opacity 0.3s ease,
+      color 0.3s ease;
+
+    &.icon-outline {
+      color: ${({ theme }) => theme.colors.white};
+      opacity: 1;
+    }
+
+    &.icon-solid {
+      color: ${({ theme }) => theme.colors.red400};
+      opacity: 0;
+    }
+
+    &:hover {
+      &.icon-outline {
+        opacity: 0;
+      }
+
+      &.icon-solid {
+        opacity: 1;
+      }
+    }
   }
 `;

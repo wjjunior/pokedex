@@ -2,6 +2,8 @@ import React from "react";
 import { Container, Index, Header, Section } from "./styles";
 import { PokemonType } from "..";
 import { PokemonModel } from "@/domain/models";
+import { HeartIcon as OutlineHeartIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 
 interface PokemonItemProps {
   pokemon: PokemonModel;
@@ -25,6 +27,10 @@ const PokemonItem = ({ pokemon }: PokemonItemProps) => {
           ))}
         </ul>
         <div id="pokemon_image" />
+        <div className="relative">
+          <OutlineHeartIcon className="heart-icon icon-outline" />
+          <SolidHeartIcon className="heart-icon icon-solid" />
+        </div>
       </Section>
     </Container>
   );

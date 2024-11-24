@@ -15,6 +15,7 @@ export const theme = {
     boxShadow: "#595959",
     white: "#fff",
     red: "#F71C1E",
+    red400: "#f87171",
     typeColors: {
       bug: {
         dark: "#66bb6a",
