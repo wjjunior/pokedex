@@ -14,6 +14,7 @@ export const theme = {
     defaultGray: "#e5e7eb",
     boxShadow: "#595959",
     white: "#fff",
+    red: "#F71C1E",
     typeColors: {
       bug: {
         dark: "#66bb6a",

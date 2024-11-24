@@ -10,6 +10,7 @@ import {
 import { PokemonItem, SearchBar, Spinner } from "@/presentation/components";
 import { LoadPokemon, LoadPokemonList } from "@/domain/usecases";
 import { PokemonModel } from "@/domain/models";
+import { theme } from "@/presentation/theme/theme";
 
 type ListProps = {
   loadPokemonList: LoadPokemonList;
@@ -78,7 +79,9 @@ const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
       <main>
         <section>
           {state.loading && state.pokemonList.length === 0 ? (
-            <Spinner />
+            <div className="flex justify-center my-3">
+              <Spinner color={theme.colors.red} />
+            </div>
           ) : (
             <PokemonList>
               {state.pokemonList.map((pokemon, index) => (
