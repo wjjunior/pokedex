@@ -121,5 +121,16 @@ export const Section = styled.section.withConfig({
         opacity: 1;
       }
     }
+
+    /* Adjust visibility based on favorite state */
+    &.favorite {
+      &.icon-outline {
+        opacity: 0; /* Hide outline when favorite */
+      }
+
+      &.icon-solid {
+        opacity: 1; /* Show solid when favorite */
+      }
+    }
   }
 `;

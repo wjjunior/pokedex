@@ -4,6 +4,7 @@ import { PokemonType } from "..";
 import { PokemonModel } from "@/domain/models";
 import { HeartIcon as OutlineHeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
+import { useFavorites } from "@/presentation/contexts/favorites-context";
 
 interface PokemonItemProps {
   pokemon: PokemonModel;
@@ -13,6 +14,9 @@ const PokemonItem = ({ pokemon }: PokemonItemProps) => {
   const sprite = pokemon.sprites?.other
     ? pokemon.sprites.other["official-artwork"].front_default
     : "";
+
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const favorite = isFavorite(pokemon.id);
 
   return (
     <Container type={`${pokemon.types[0].type.name}`}>
@@ -27,9 +31,15 @@ const PokemonItem = ({ pokemon }: PokemonItemProps) => {
           ))}
         </ul>
         <div id="pokemon_image" />
-        <div className="relative">
-          <OutlineHeartIcon className="heart-icon icon-outline" />
-          <SolidHeartIcon className="heart-icon icon-solid" />
+        <div className="relative" onClick={() => toggleFavorite(pokemon)}>
+          {favorite ? (
+            <SolidHeartIcon className="heart-icon icon-solid favorite" />
+          ) : (
+            <>
+              <OutlineHeartIcon className="heart-icon icon-outline" />
+              <SolidHeartIcon className="heart-icon icon-solid" />
+            </>
+          )}
         </div>
       </Section>
     </Container>
