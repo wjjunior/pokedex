@@ -55,7 +55,7 @@ const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
         pokemonList: [...prevState.pokemonList, ...detailedPokemon],
         loading: false,
         hasMore: !!response.next,
-        offset: prevState.offset + state.limit,
+        offset: prevState.offset + prevState.limit,
       }));
     } catch (error) {
       console.error("Error fetching Pokémon data:", error);
