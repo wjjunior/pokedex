@@ -72,7 +72,7 @@ export const MorePokemonArea = styled.section`
 
 export const Loader = styled.div`
   margin: 30px auto;
-  background: url("pokeball.svg") no-repeat;
+  background: url("/pokeball.svg") no-repeat;
   background-size: contain;
   background-position: center;
   width: 50px;

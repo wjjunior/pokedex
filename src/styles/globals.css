@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-image: url("/pokeball.svg");
+  background-color: rgba(255, 255, 255, 0.8);
+  background-blend-mode: lighten;
+  background-repeat: no-repeat;
+  background-size: 70vw;
+  background-position-x: 60vw;
+  background-position-y: -31vw;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
