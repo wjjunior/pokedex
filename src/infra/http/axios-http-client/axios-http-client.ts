@@ -1,4 +1,5 @@
 import {
+  HttpDeleteParams,
   HttpGetClient,
   HttpGetParams,
   HttpPostClient,
@@ -31,6 +32,22 @@ export class AxiosHttpClient<T, R>
 
       axiosResponse = await axios.get(fullUrl, {
         params: params.queryParams,
+      });
+    } catch (error) {
+      const axiosError = error as { response: AxiosResponse<R> };
+      axiosResponse = axiosError.response;
+    }
+    return {
+      statusCode: axiosResponse.status,
+      body: axiosResponse.data,
+    };
+  }
+
+  async delete(params: HttpDeleteParams<T>): Promise<HttpResponse<R>> {
+    let axiosResponse: AxiosResponse<R>;
+    try {
+      axiosResponse = await axios.delete(params.url, {
+        data: params.body,
       });
     } catch (error) {
       const axiosError = error as { response: AxiosResponse<R> };

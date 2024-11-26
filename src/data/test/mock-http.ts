@@ -1,4 +1,5 @@
 import {
+  HttpDeleteParams,
   HttpGetClient,
   HttpGetParams,
   HttpPostClient,
@@ -20,6 +21,13 @@ export const mockGetRequest = <T = unknown>(
   url: chance().url(),
   queryParams: params,
   pathParams,
+});
+
+export const mockDeleteRequest = <T = unknown>(
+  body?: T,
+): HttpDeleteParams<T> => ({
+  url: chance().url(),
+  body,
 });
 
 export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
@@ -46,6 +54,16 @@ export class HttpGetClientSpy<T, R> implements HttpGetClient<T, R> {
     const fullUrl = `${params.url}${params.pathParams && params.pathParams.length > 0 ? `/${params.pathParams.join("/")}` : ""}`;
     this.url = fullUrl;
     this.pathParams = params.pathParams;
+    return this.response;
+  }
+}
+
+export class HttpDeleteClientSpy<T, R> {
+  url?: string;
+  response: HttpResponse<R> = { statusCode: HttpStatusCode.noContent };
+
+  async delete(params: HttpDeleteParams<T>): Promise<HttpResponse<R>> {
+    this.url = params.url;
     return this.response;
   }
 }

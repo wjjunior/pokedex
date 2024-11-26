@@ -1,6 +1,10 @@
 import { AxiosHttpClient } from "./axios-http-client";
 import axios from "axios";
-import { mockGetRequest, mockPostRequest } from "@/data/test";
+import {
+  mockDeleteRequest,
+  mockGetRequest,
+  mockPostRequest,
+} from "@/data/test";
 import { mockAxios, mockHttpResponse } from "@/infra/test";
 
 jest.mock("axios");
@@ -77,6 +81,41 @@ describe("AxiosHttpClient", () => {
       });
       const promise = sut.get(mockGetRequest());
       expect(promise).toEqual(mockedAxios.get.mock.results[0].value);
+    });
+  });
+
+  describe("delete", () => {
+    test("Should call axios.delete with correct values", async () => {
+      const { sut, mockedAxios } = makeSut();
+      const request = mockDeleteRequest();
+
+      await sut.delete(request);
+
+      expect(mockedAxios.delete).toHaveBeenCalledWith(request.url, {
+        data: request.body,
+      });
+    });
+
+    test("Should return correct response on axios.delete", async () => {
+      const { sut, mockedAxios } = makeSut();
+
+      const httpResponse = await sut.delete(mockDeleteRequest());
+      const axiosResponse = await mockedAxios.delete.mock.results[0].value;
+
+      expect(httpResponse).toEqual({
+        statusCode: axiosResponse.status,
+        body: axiosResponse.data,
+      });
+    });
+
+    test("Should return correct error on axios.delete", () => {
+      const { sut, mockedAxios } = makeSut();
+      mockedAxios.delete.mockRejectedValueOnce({
+        response: mockHttpResponse(),
+      });
+
+      const promise = sut.delete(mockDeleteRequest());
+      expect(promise).toEqual(mockedAxios.delete.mock.results[0].value);
     });
   });
 });
