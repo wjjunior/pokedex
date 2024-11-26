@@ -1,17 +1,7 @@
 import React from "react";
-import {
-  Container,
-  Header,
-  Title,
-  PokemonList,
-  MorePokemonArea,
-  NoMatchingAlert,
-} from "./styles";
-import { PokemonItem, SearchBar, Spinner } from "@/presentation/components";
 import { LoadPokemon, LoadPokemonList } from "@/domain/usecases";
-import { theme } from "@/presentation/theme/theme";
-import { usePokemonList } from "@/presentation/hooks";
 import { FavoritesProvider } from "@/presentation/contexts/favorites-context";
+import { PokemonList } from "@/presentation/components";
 
 type ListProps = {
   loadPokemonList: LoadPokemonList;
@@ -19,72 +9,12 @@ type ListProps = {
 };
 
 const List: React.FC<ListProps> = ({ loadPokemonList, loadPokemon }) => {
-  const {
-    pokemonList,
-    loading,
-    hasMore,
-    searchQuery,
-    setSearchQuery,
-    fetchPokemon,
-    handleSearch,
-  } = usePokemonList({ loadPokemonList, loadPokemon });
-
   return (
     <FavoritesProvider>
-      <Container>
-        <Header>
-          <Title>Pokédex</Title>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSearch(searchQuery);
-            }}
-          >
-            <SearchBar
-              value={searchQuery}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSearchQuery(e.target.value)
-              }
-            />
-          </form>
-        </Header>
-        <main>
-          <section>
-            {loading && pokemonList.length === 0 ? (
-              <div className="flex justify-center my-3">
-                <Spinner color={theme.colors.red} />
-              </div>
-            ) : (
-              <PokemonList>
-                {pokemonList.map((pokemon, index) => (
-                  <PokemonItem
-                    key={`${pokemon.name}-${index}`}
-                    pokemon={pokemon}
-                  />
-                ))}
-              </PokemonList>
-            )}
-          </section>
-
-          {!loading && (
-            <section>
-              <MorePokemonArea>
-                {hasMore ? (
-                  <button type="button" onClick={() => fetchPokemon()}>
-                    Load more Pokémon
-                  </button>
-                ) : null}
-              </MorePokemonArea>
-
-              {!pokemonList.length && (
-                <NoMatchingAlert>
-                  <h3>No Pokémon matches your search!</h3>
-                </NoMatchingAlert>
-              )}
-            </section>
-          )}
-        </main>
-      </Container>
+      <PokemonList
+        loadPokemon={loadPokemon}
+        loadPokemonList={loadPokemonList}
+      />
     </FavoritesProvider>
   );
 };

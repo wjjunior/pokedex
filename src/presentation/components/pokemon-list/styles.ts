@@ -30,7 +30,7 @@ export const Title = styled.h1`
   }
 `;
 
-export const PokemonList = styled.ul`
+export const PokemonListUl = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 20px;
