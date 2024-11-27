@@ -1,7 +1,7 @@
 import { List } from "@/presentation/pages";
 import React from "react";
 import {
-  makeRemoteFavorite,
+  makeMockRemoteFavorites,
   makeRemoteLoadPokemon,
   makeRemoteLoadPokemonList,
 } from "@/main/factories/usecases";
@@ -11,7 +11,7 @@ export const makeList = () => {
     <List
       loadPokemonList={makeRemoteLoadPokemonList()}
       loadPokemon={makeRemoteLoadPokemon()}
-      handleFavorites={makeRemoteFavorite()}
+      handleFavorites={makeMockRemoteFavorites()}
     />
   );
 };
