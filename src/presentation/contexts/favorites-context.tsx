@@ -3,8 +3,9 @@ import { PokemonModel } from "@/domain/models";
 
 type FavoritesContextType = {
   favorites: PokemonModel[];
-  toggleFavorite: (pokemon: PokemonModel) => void;
+  toggleFavorite: (pokemon: PokemonModel) => Promise<void>;
   isFavorite: (pokemonId: number) => boolean;
+  setFavorites: React.Dispatch<React.SetStateAction<PokemonModel[]>>; // Add this line
 };
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(
@@ -16,17 +17,13 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [favorites, setFavorites] = useState<PokemonModel[]>([]);
 
-  const toggleFavorite = (pokemon: PokemonModel) => {
-    setFavorites((prevFavorites) => {
-      const isAlreadyFavorite = prevFavorites.some(
-        (fav) => fav.id === pokemon.id,
-      );
-      if (isAlreadyFavorite) {
-        return prevFavorites.filter((fav) => fav.id !== pokemon.id);
-      } else {
-        return [...prevFavorites, pokemon];
-      }
-    });
+  const toggleFavorite = async (pokemon: PokemonModel) => {
+    const isAlreadyFavorite = favorites.some((fav) => fav.id === pokemon.id);
+    if (isAlreadyFavorite) {
+      setFavorites((prev) => prev.filter((fav) => fav.id !== pokemon.id));
+    } else {
+      setFavorites((prev) => [...prev, pokemon]);
+    }
   };
 
   const isFavorite = (pokemonId: number) => {
@@ -35,7 +32,12 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <FavoritesContext.Provider
-      value={{ favorites, toggleFavorite, isFavorite }}
+      value={{
+        favorites,
+        toggleFavorite,
+        isFavorite,
+        setFavorites, // Provide the setFavorites function
+      }}
     >
       {children}
     </FavoritesContext.Provider>

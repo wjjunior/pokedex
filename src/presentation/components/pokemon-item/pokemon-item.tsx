@@ -8,15 +8,29 @@ import { useFavorites } from "@/presentation/contexts/favorites-context";
 
 interface PokemonItemProps {
   pokemon: PokemonModel;
+  addFavorite: (pokemon: PokemonModel) => Promise<void>;
+  removeFavorite: (pokemon: PokemonModel) => Promise<void>;
 }
 
-const PokemonItem = ({ pokemon }: PokemonItemProps) => {
+const PokemonItem = ({
+  pokemon,
+  addFavorite,
+  removeFavorite,
+}: PokemonItemProps) => {
   const sprite = pokemon.sprites?.other
     ? pokemon.sprites.other["official-artwork"].front_default
     : "";
 
-  const { toggleFavorite, isFavorite } = useFavorites();
+  const { isFavorite } = useFavorites();
   const favorite = isFavorite(pokemon.id);
+
+  const handleToggleFavorite = async () => {
+    if (favorite) {
+      await removeFavorite(pokemon);
+    } else {
+      await addFavorite(pokemon);
+    }
+  };
 
   return (
     <Container type={`${pokemon.types[0].type.name}`}>
@@ -31,7 +45,7 @@ const PokemonItem = ({ pokemon }: PokemonItemProps) => {
           ))}
         </ul>
         <div id="pokemon_image" />
-        <div className="relative" onClick={() => toggleFavorite(pokemon)}>
+        <div className="relative" onClick={handleToggleFavorite}>
           {favorite ? (
             <SolidHeartIcon className="heart-icon icon-solid favorite" />
           ) : (
