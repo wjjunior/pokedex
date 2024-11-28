@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pokedex
 
-## Getting Started
+> ## :page_with_curl: Resources
 
-First, run the development server:
+- React 18
+- Node v22
+- Next.js 15
+- Typescript
+- SOLID
+- Tailwind CSS
+- Styled Components
+- Jest
+- TDD
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+> ## :books: Requirements
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Git
+- Node
+- NPM
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## :rocket: Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+In the project directory, you can run:
 
-## Learn More
+### `npm install`
 
-To learn more about Next.js, take a look at the following resources:
+Install the dependencies listed on `package.json` file
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### `npm start`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Runs the app.\
 
-## Deploy on Vercel
+### `npm run dev`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Starts the app in development mode using the Next.js development server.
+Open http://localhost:3000/ to view it in the browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+
+> ## :books: Considerations
+
+In this small project, I aimed to apply as much of my knowledge as possible about frontend architecture, leveraging SOLID principles and Clean Code practices.
+
+I chose to use Axios instead of more robust tools like React Query or native solutions such as the Nest.js API. This decision was made to better demonstrate dependency inversion.
+
+The architecture is primarily designed to isolate all logic and framework dependencies, making it easier to replace external libraries or even the frontend framework itself, while maximizing the reusability of JS/TS code.
+
+In a real-world scenario, I might have opted for a simpler architecture, replacing unit tests with end-to-end (e2e) tests to speed up development and deliver more value.
