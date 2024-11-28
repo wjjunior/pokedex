@@ -1,5 +1,7 @@
 # Pokedex
 
+<img width="1451" alt="image" src="https://github.com/user-attachments/assets/bece9425-0899-47a1-86f4-4f79d1848a46">
+
 > ## :page_with_curl: Resources
 
 - React 18
